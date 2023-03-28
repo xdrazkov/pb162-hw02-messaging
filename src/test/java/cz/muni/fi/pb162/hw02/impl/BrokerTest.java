@@ -46,8 +46,12 @@ public class BrokerTest extends TestBase{
         var polled = broker.poll(Map.of(), 1, List.of(TOPIC_HOUSE));
         var topics = broker.listTopics();
         // then
-        softly.assertThat(polled).isEmpty();
-        softly.assertThat(topics).isEmpty();
+        softly.assertThat(polled)
+                .describedAs("Messages polled from an empty broker")
+                .isEmpty();
+        softly.assertThat(topics)
+                .describedAs("Topics listed from an empty broker")
+                .isEmpty();
 
         // when
         var batch = push(msg(TOPIC_HOUSE, Map.of("name", "Tom")));
@@ -56,7 +60,9 @@ public class BrokerTest extends TestBase{
         topics = broker.listTopics();
         stored.addAll(batch);
         // then
-        softly.assertThat(polled).containsExactlyInAnyOrderElementsOf(stored);
+        softly.assertThat(polled)
+                .describedAs("Messages polled from '{}' after pushing Tom", TOPIC_HOUSE)
+                .containsExactlyInAnyOrderElementsOf(stored);
         softly.assertThat(topics).containsExactlyInAnyOrder(TOPIC_HOUSE);
 
         // when
@@ -64,32 +70,44 @@ public class BrokerTest extends TestBase{
         polled = broker.poll(Map.of(), 1, List.of(TOPIC_HOUSE));
         var jerry = last(batch, TOPIC_HOUSE);
         // then
-        softly.assertThat(polled).containsExactlyInAnyOrder(tom);
+        softly.assertThat(polled)
+                .describedAs("Messages polled from '{}' after pushing Jerry", TOPIC_HOUSE)
+                .containsExactlyInAnyOrder(tom);
 
         // when
         polled = broker.poll(Map.of(), 2, List.of());
         // then
-        softly.assertThat(polled).isEmpty();
+        softly.assertThat(polled)
+                .describedAs("Messages polled from no topics")
+                .isEmpty();
 
         // when
         polled = broker.poll(Map.of(), 2, List.of(TOPIC_HOUSE));
         // then
-        softly.assertThat(polled).containsExactlyInAnyOrder(tom, jerry);
+        softly.assertThat(polled)
+                .describedAs("Messages polled from topic '{}'", TOPIC_HOUSE)
+                .containsExactlyInAnyOrder(tom, jerry);
 
         // when
         polled = broker.poll(Map.of(TOPIC_HOUSE, tom.id()), 1, List.of(TOPIC_HOUSE));
         // then
-        softly.assertThat(polled).containsExactlyInAnyOrder(jerry);
+        softly.assertThat(polled)
+                .describedAs("Message polled from topic with offset")
+                .containsExactlyInAnyOrder(jerry);
 
         // when
         polled = broker.poll(Map.of(TOPIC_HOUSE, jerry.id()), 1, List.of(TOPIC_HOUSE));
         // then
-        softly.assertThat(polled).isEmpty();
+        softly.assertThat(polled)
+                .describedAs("Message polled from topic with maximal offset.")
+                .isEmpty();
 
         // when
         polled = broker.poll(Map.of(TOPIC_HOUSE, jerry.id()), 2, List.of(TOPIC_HOUSE));
         // then
-        softly.assertThat(polled).isEmpty();
+        softly.assertThat(polled)
+                .describedAs("Messages polled from topic with maximal offset.")
+                .isEmpty();
     }
 
     @Test
