@@ -75,10 +75,8 @@ Follow instructions of your tutor because the procedure to submit your solution 
 
 Assignment Description
 -------------
-The goal of this homework is to implement a simple messaging framework
-messaging / eventing framework such as
+The goal of this homework is to implement a simple messaging / eventing framework such as
 [Apache Kafka](https://en.wikipedia.org/wiki/Apache_Kafka) (in a **VERY** simplified version).
-
 
 ### Architecture
 The architecture of our simple messaging framework consists of three components.
