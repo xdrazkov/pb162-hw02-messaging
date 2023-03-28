@@ -7,7 +7,12 @@ import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -95,14 +100,24 @@ public class TestBase {
 
         private List<Message> batch = List.of();
 
-        private Map<String, Long> lastOffsets = Map.of();
+        private Map<String, Long> lastPollOffsets = Map.of();
+        private int lastPollNum = 0;
+        private Collection<String> lastPollTopics = List.of();
 
         public List<Message> messages() {
             return stored;
         }
 
-        public Map<String, Long> lastOffsets() {
-            return lastOffsets;
+        public Map<String, Long> lastPollOffsets() {
+            return lastPollOffsets;
+        }
+
+        public int lastPollNum() {
+            return lastPollNum;
+        }
+
+        public Collection<String> lastPollTopics() {
+            return lastPollTopics;
         }
 
         public void setTopics(String... topics) {
@@ -135,7 +150,9 @@ public class TestBase {
 
         @Override
         public Collection<Message> poll(Map<String, Long> offsets, int num, Collection<String> topics) {
-            this.lastOffsets = offsets;
+            this.lastPollOffsets = offsets;
+            this.lastPollNum = num;
+            this.lastPollTopics = topics;
             return batch;
         }
     }
