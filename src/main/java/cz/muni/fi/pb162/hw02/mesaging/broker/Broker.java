@@ -43,6 +43,7 @@ public interface Broker {
      *      - the value is an id of the last message read in that topic
      *
      * @param offsets offset definition
+     * @param num maximal number of messages to fetch from each topic
      * @param topics list of topics
      * @return collection of messages
      */

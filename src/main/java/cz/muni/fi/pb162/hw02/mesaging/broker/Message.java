@@ -15,7 +15,18 @@ public interface Message {
      */
     Long id();
 
+
+    /**
+     * Topic of this message
+     *
+     * @return destination topic associated with this message
+     */
     String topic();
 
+    /**
+     * Data of this message
+     *
+     * @return data associated with this message
+     */
     Map<String, Object> data();
 }
