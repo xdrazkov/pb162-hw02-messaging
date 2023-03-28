@@ -97,7 +97,7 @@ A message is simply a data map with associated destination topic and an identifi
 A producer is one of the two types of clients in messaging system. As the name suggest producer is used to send messages to the broker.
 A message is delivered to the broker without its identifier which is only then assigned by the broker. 
 
-### Consumer (Client)
+#### Consumer (Client)
 A consumer is the counterpart to producer. It is a client capable of digesting messages from the broker. A consumer requests certain number of messages from broker's topics and internally keeps track of the last messages consumed (based on the message identifier values). This information is used to request only unread messages from the broker.
 
 ### Implementation Notes
