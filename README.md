@@ -85,6 +85,8 @@ The architecture of our simple messaging framework consists of three components.
 2) *Producer (Client)*
 3) *Consumer (Client)*
 
+![System Architecture](img/architecture.jpeg)
+
 The following paragraphs will briefly describe the idea behind each of these components. However, additional details can be found in the javadoc of associated interfaces.
 
 #### Broker
@@ -105,6 +107,10 @@ To achieve proper decomposition, you are required to provide the implementation 
 
 - Interfaces under `cz.muni.fi.pb162.hw02`which define the API
 - Class `Messaging` which provides [factory methods](https://en.wikipedia.org/wiki/Factory_method_pattern) for your implementations
+
+**Tip**: Choosing the right collection types can save you significant amount of code
+
+![Collection Framework](img/collections.png)
 
 ### Running the Application
 Since we are essentially creating a framework there isn't anything to run this time. However, if you need it, feel free to create a main method where you can experiment with the API.
