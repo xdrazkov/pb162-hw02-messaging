@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class IntegrationTest extends TestBase {
@@ -53,7 +54,7 @@ public class IntegrationTest extends TestBase {
         // when
         var consumed = consumer.consume(2, TOPIC_HOUSE, TOPIC_GARDEN);
         var ids = consumed.stream().map(Message::id).collect(Collectors.toSet());
-        var topics = consumed.stream().map(Message::topic).toList();
+        var topics = consumed.stream().map(Message::topics).flatMap(Set::stream).toList();
         var names = consumed.stream()
                 .map(Message::data).map(d -> d.get("name").toString()).collect(Collectors.toSet());
         // then

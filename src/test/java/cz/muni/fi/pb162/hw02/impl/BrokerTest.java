@@ -32,16 +32,19 @@ public class BrokerTest extends TestBase{
         var tom = last(batch, topic);
         // then
         assertThat(tom).isNotNull();
-        softly.assertThat(tom.id()).describedAs("id of stored message").isNotNull();
-        softly.assertThat(tom.topic()).describedAs("topic of stored message").isEqualTo(topic);
-        softly.assertThat(tom.data()).describedAs("data of stored message").containsAllEntriesOf(data);
+        softly.assertThat(tom.id())
+                .describedAs("id of stored message")
+                .isNotNull();
+        softly.assertThat(tom.topics())
+                .describedAs("topics of stored message")
+                .containsExactlyInAnyOrder(topic);
+        softly.assertThat(tom.data())
+                .describedAs("data of stored message")
+                .containsAllEntriesOf(data);
     }
 
     @Test
     public void shouldStoreMessagesInSingleTopic() {
-        // given
-        var stored = new HashSet<Message>();
-
         // when
         var polled = broker.poll(Map.of(), 1, List.of(TOPIC_HOUSE));
         var topics = broker.listTopics();
@@ -58,11 +61,10 @@ public class BrokerTest extends TestBase{
         var tom = last(batch, TOPIC_HOUSE);
         polled = broker.poll(Map.of(), 1, List.of(TOPIC_HOUSE));
         topics = broker.listTopics();
-        stored.addAll(batch);
         // then
         softly.assertThat(polled)
                 .describedAs("Messages polled from '{}' after pushing Tom", TOPIC_HOUSE)
-                .containsExactlyInAnyOrderElementsOf(stored);
+                .containsExactlyInAnyOrder(tom);
         softly.assertThat(topics).containsExactlyInAnyOrder(TOPIC_HOUSE);
 
         // when

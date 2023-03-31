@@ -1,6 +1,7 @@
 package cz.muni.fi.pb162.hw02.mesaging.broker;
 
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -17,11 +18,11 @@ public interface Message {
 
 
     /**
-     * Topic of this message
+     * Topics of this message
      *
      * @return destination topic associated with this message
      */
-    String topic();
+    Set<String> topics();
 
     /**
      * Data of this message

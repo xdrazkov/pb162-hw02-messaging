@@ -7,12 +7,7 @@ import org.assertj.core.api.junit.jupiter.InjectSoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -40,7 +35,7 @@ public class TestBase {
     protected Message last(Collection<Message> messages, String topic) {
 
         return messages.stream()
-                .filter(m -> Objects.equals(topic, m.topic()))
+                .filter(m -> m.topics().contains(topic))
                 .max(Comparator.comparing(Message::id))
                 .orElseThrow();
     }
@@ -62,11 +57,11 @@ public class TestBase {
      * Factory for creating a message with ID
      *
      * @param id message's id
-     * @param topic message's topic
+     * @param topics message's topics
      * @param data message's data
      * @return message object
      */
-    protected static Message msg(Long id, String topic, Map<String, Object> data) {
+    protected static Message msg(Long id, Set<String> topics, Map<String, Object> data) {
         return new Message() {
             @Override
             public Long id() {
@@ -74,8 +69,8 @@ public class TestBase {
             }
 
             @Override
-            public String topic() {
-                return topic;
+            public Set<String> topics() {
+                return topics;
             }
 
             @Override
@@ -83,6 +78,10 @@ public class TestBase {
                 return data;
             }
         };
+    }
+
+    protected static Message msg(Long id, String topic, Map<String, Object> data) {
+        return msg(id, Set.of(topic), data);
     }
 
     /**
@@ -141,7 +140,7 @@ public class TestBase {
         public Collection<Message> push(Collection<Message> messages) {
             var list = new ArrayList<>(messages);
             var batch = IntStream.range(0, messages.size())
-                    .mapToObj(i -> msg(ids.get(i), list.get(i).topic(), list.get(i).data()))
+                    .mapToObj(i -> msg(ids.get(i), list.get(i).topics(), list.get(i).data()))
                     .toList();
 
             this.stored.addAll(batch);
