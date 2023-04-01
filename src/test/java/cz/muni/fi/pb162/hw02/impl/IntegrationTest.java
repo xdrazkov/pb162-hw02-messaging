@@ -8,12 +8,11 @@ import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 public class IntegrationTest extends TestBase {
@@ -90,7 +89,6 @@ public class IntegrationTest extends TestBase {
 
     /**
      * At the start of this test the Broker contains the following messages
-     *
      *
      * House (3): Tom, Jerry, Butch
      * Garden (1): Nibbles
