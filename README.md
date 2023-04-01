@@ -108,6 +108,9 @@ To achieve proper decomposition, you are required to provide the implementation 
 - Interfaces under `cz.muni.fi.pb162.hw02`which define the API
 - Class `Messaging` which provides [factory methods](https://en.wikipedia.org/wiki/Factory_method_pattern) for your implementations
 
+ 
+Keep in mind the [substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle). Your `Client` classes should work with any implementation of `Broker` interface and your `Producer` should be able to work with any valid implementation of `Message` interface.
+
 **Tip**: Choosing the right collection types can save you significant amount of code
 
 ![Collection Framework](img/collections.png)

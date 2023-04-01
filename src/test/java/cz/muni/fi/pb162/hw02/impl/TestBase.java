@@ -17,6 +17,7 @@ public class TestBase {
 
     protected static final String TOPIC_HOUSE = "house";
     protected static final String TOPIC_GARDEN = "garden";
+    protected static final String TOPIC_PATIO = "patio";
 
     /**
      * This allows multiple asserts to be executed in single test even when earlier asserts fail.
@@ -42,12 +43,44 @@ public class TestBase {
 
 
     /**
+     * Finds the message based on data
+     *
+     * @param messages collection of messages
+     * @param key data key
+     * @param value expected data value
+     * @return message with given key-value pair in its data
+     */
+    protected Message filter(Collection<Message> messages, String key, Object value) {
+
+        return messages.stream()
+                .filter(m -> m.data().containsKey(key))
+                .filter(m -> m.data().get(key).equals(value))
+                .max(Comparator.comparing(Message::id))
+                .orElse(null);
+    }
+
+    /**
+     * Finds the message based on {@code name} key in data
+     * @param messages collection of messages
+     * @param name expected name
+     * @return message with given name in data
+     */
+    protected Message filterByName(Collection<Message> messages, String name) {
+        return filter(messages, "name", name);
+    }
+
+    /**
      * Factory for creating a message with {@code null} ID
      *
-     * @param topic message's topic
+     * @param topics message's topics
      * @param data message's data
      * @return message object
      */
+    protected static Message msg(Set<String> topics, Map<String, Object> data) {
+        return msg(null, topics, data);
+    }
+
+
     protected static Message msg(String topic, Map<String, Object> data) {
         return msg(null, topic, data);
     }

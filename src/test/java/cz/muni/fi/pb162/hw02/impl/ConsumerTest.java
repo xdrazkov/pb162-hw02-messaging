@@ -85,7 +85,7 @@ public class ConsumerTest extends TestBase {
         consumer.updateOffsets(Map.of(TOPIC_HOUSE, 1L));
         // then
         softly.assertThat(consumer.getOffsets())
-                .describedAs("Consumer offsets after updating offset for topic '" + TOPIC_HOUSE + "'")
+                .describedAs("Consumer offsets after updating offset for topic '%s'", TOPIC_HOUSE)
                 .containsExactlyInAnyOrderEntriesOf(Map.of(TOPIC_HOUSE, 1L, TOPIC_GARDEN, 10L));
 
         // when

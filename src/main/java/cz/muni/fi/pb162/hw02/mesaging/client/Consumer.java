@@ -15,8 +15,18 @@ public interface Consumer extends Client {
 
     /**
      * Consumes next batch of unread messages from broker.
+     * <br>
+     *
      * The method internally also updates topic offsets so that only unread messages
      * are requested on consecutive calls of this method.
+     * <br>
+     *
+     * Only offsets for requested topics are updated even when some message also belongs
+     * to different topics.
+     * <br>
+     *
+     * Note: The offset update is more complex than it looks. Make sure not to lose any message on
+     * consecutive calls.
      *
      * @param num maximum number of messages to consume per topic
      * @param topics topics from which to consume messages

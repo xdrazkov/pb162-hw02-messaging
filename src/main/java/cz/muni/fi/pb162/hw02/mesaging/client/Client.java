@@ -18,7 +18,7 @@ public interface Client  {
      * Lists topics currently registered by the broker.
      * A registered topic is any topic which was previously used to store data
      *
-     * @return list of topics registered by the broker
+     * @return topics registered by the broker
      */
     Collection<String> listTopics();
 

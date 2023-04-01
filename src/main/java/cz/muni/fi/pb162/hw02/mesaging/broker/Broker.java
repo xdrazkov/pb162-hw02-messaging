@@ -15,9 +15,9 @@ public interface Broker {
 
     /**
      * Lists topics currently registered by the broker.
-     * A registered topic is any topic which was previously used to store data
+     * A registered topic is any topic which was previously used to store messages
      *
-     * @return list of available topics
+     * @return registered topics
      */
     Collection<String> listTopics();
 
@@ -31,6 +31,7 @@ public interface Broker {
      *  3) Message is stored in each topic
      * <br>
      * Note: How exactly are the messages stored internally is up to you.
+     * Note: Don't assume anything besides the fact that messages are instances of {@link Message}
      *
      * @param messages messages to store
      * @return Collection of message objects with populated identifiers
@@ -48,11 +49,14 @@ public interface Broker {
      * The offset definition is a map where
      *      - the key is a topic name
      *      - the value is an id of the last message read in that topic
+     * <br>
+     *
+     * If a message is stored in multiple topics then it is not duplicated in the returned collection.
      *
      * @param offsets offset definition
      * @param num maximal number of messages to fetch from each topic
      * @param topics list of topics
-     * @return collection of messages
+     * @return collection of unique messages
      */
     Collection<Message> poll(Map<String, Long> offsets, int num, Collection<String> topics);
 }
