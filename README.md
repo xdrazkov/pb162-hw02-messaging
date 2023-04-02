@@ -18,9 +18,9 @@ The structure of the project provided as a base for your implementation should m
 
 1. Package ```cz.muni.fi.pb162.hw02``` contains classes and interfaces provided as a part of the assignment.
    - **Do not modify or add any classes or subpackages into this package.**
-   - **Interfaces must be implemented**
+   - **Interfaces must be implemented.**
 2. Package  ```cz.muni.fi.pb162.hw02.impl``` should contain your implementation.
-- **Anything outside this package will be ignored during evaluation.**
+- **Anything outside this package will be ignored during the evaluation.**
 
 
 Additionally, the following applies for the initial contents of ``cz.muni.fi.pb162.hw02.impl``
@@ -46,7 +46,7 @@ The project can be compiled and packaged in the same way you already know.
 $ mvn clean install
 ```
 
-The only difference is that unlike the seminar project, the checks for missing documentation and a style violation will produce an error this time.
+The only difference is that unlike the seminar project, the checks for a missing documentation and a style violation will produce an error this time.
 You can disable this behavior temporarily when running this command.
 
 ```bash
@@ -56,7 +56,7 @@ $ mvn clean install -Dcheckstyle.skip
 You can consult your seminar teacher to help you set the ```checkstyle.skip``` property in your IDE (or just google it).
 
 ### Submitting the Assignment
-Follow instructions of your tutor because the procedure to submit your solution may differ based on your seminar group. However, there are two ways of submission in general:
+Follow your tutor's instructions because the procedure to submit your solution may differ based on your seminar group. However, there are two ways of submission in general:
 * Fork the project, develop your code in a development branch, and finally ask for the merge.
 * Submit ```target/homework02-2023-1.0-SNAPSHOT-sources.jar``` to the homework vault.
 
@@ -66,7 +66,7 @@ Follow instructions of your tutor because the procedure to submit your solution 
   - Split your code into multiple classes
   - Organize your classes in packages
 - Single responsibility
-  - Class should ideally have a single purpose
+  - Each class should ideally have a single purpose
 - Extendable code
 - All provided tests must pass
 
@@ -88,30 +88,30 @@ The architecture of our simple messaging framework consists of three components.
 The following paragraphs will briefly describe the idea behind each of these components. However, additional details can be found in the javadoc of associated interfaces.
 
 #### Broker
-A broker is a main storage component. It is a database of sort used to store messages (or events as they are called in some systems.). In our case the Api of a Broker is defined by the `Broker` interface.
+A broker is the main storage component. It is sort of a database used to store messages (or events as they are called in some systems). In our case the API of the Broker is defined by the `Broker` interface.
 
 **Message**
-A message is simply a data map with associated destination topic and an identifier. A broker is then capable of storing messages and delivering them based on topic names and the value of message identifiers.
+A message is simply a data map with associated destination topics and an identifier. A broker is then capable of storing messages and delivering them based on topic names and the value of message identifiers.
 
 #### Producer (Client)
-A producer is one of the two types of clients in messaging system. As the name suggest producer is used to send messages to the broker.
+A producer is one of the two types of clients in a messaging system. As the name suggests a producer is used to send messages to a broker.
 A message is delivered to the broker without its identifier which is only then assigned by the broker. 
 
 #### Consumer (Client)
-A consumer is the counterpart to producer. It is a client capable of digesting messages from the broker. A consumer requests certain number of messages from broker's topics and internally keeps track of the last messages consumed (based on the message identifier values). This information is used to request only unread messages from the broker.
+A consumer is a counterpart to a producer. It is a client capable of digesting messages from a broker. A consumer requests a certain number of messages from broker's topics and keeps track of the last messages consumed internally (based on the message identifier values). This information is used to request only unread messages from the broker.
 
 ### Implementation Notes
 To achieve proper decomposition, you are required to provide the implementation of
 
-- Interfaces under `cz.muni.fi.pb162.hw02`which define the API
+- Interfaces under `cz.muni.fi.pb162.hw02` which define the API
 - Class `Messaging` which provides [factory methods](https://en.wikipedia.org/wiki/Factory_method_pattern) for your implementations
 
  
-Keep in mind the [substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle). Your `Client` classes should work with any implementation of `Broker` interface and your `Producer` should be able to work with any valid implementation of `Message` interface.
+Keep in mind the [substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle). Your `Client` classes should work with any implementation of the `Broker` interface and your `Producer` should be able to work with any valid implementation of the `Message` interface.
 
-**Tip**: Choosing the right collection types can save you significant amount of code
+**Tip**: Choosing the right collection types can save you a significant amount of code.
 
 ![Collection Framework](img/collections.png)
 
 ### Running the Application
-Since we are essentially creating a framework there isn't anything to run this time. However, if you need it, feel free to create a main method where you can experiment with the API.
+Since we are essentially creating a framework, there isn't anything to run this time. However, if you need it, feel free to create a main method where you can experiment with the API.
