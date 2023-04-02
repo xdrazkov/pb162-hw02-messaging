@@ -57,11 +57,11 @@ public class IntegrationTest extends TestBase {
      * Garden (1): Nibbles
      *
      * The test does the following
-     * 2) Read 2 messages from House and 2 messages from Patio
+     * 1) Read 3 messages from House and 3 messages from Garden
      *  - store consumer offsets (x)
-     *  - Verify 4 messages were read (there are no overlap between first 2 messages stored in House and in Patio)
+     *  - Verify 4 messages were read (there are no overlaps, however only 1 message is in Garden)
      *  - Verify 4 unique message IDs were read
-     *  - Verify consumer offset contains entries for House and Patio
+     *  - Verify messages with key "name" and values "Tom", "Jerry", "Butch" and "Nibbles"  were read
      */
     @Test
     public void shouldConsumeAllData() {
@@ -73,7 +73,7 @@ public class IntegrationTest extends TestBase {
                 .map(Message::data).map(d -> d.get("name").toString()).collect(toSet());
         // then
         softly.assertThat(consumed)
-                .describedAs("Consume two messages from each topic")
+                .describedAs("Messages consumed from topics")
                 .hasSize(4);
         softly.assertThat(ids)
                 .describedAs("Unique IDs of consumed messages")
@@ -95,7 +95,7 @@ public class IntegrationTest extends TestBase {
      *
      * The test does the following
      *
-     * 1) Produce 3 messages. After which the Broker contains following data
+     * 1) Produce 3 messages. After which the Broker contains following messages
      *
      * House (5): Tom, Jerry, Butch, time, lunch
      * Garden (2): Nibbles, time
@@ -105,24 +105,24 @@ public class IntegrationTest extends TestBase {
      *  - store consumer offsets (x)
      *  - Verify 4 messages were read (there are no overlap between first 2 messages stored in House and in Patio)
      *  - Verify 4 unique message IDs were read
-     *  - Verify consumer offset contains entries for House and Patio
+     *  - Verify consumer offsets contain entries for House and Patio
      *
      * 3) Read 2 messages from Garden
-     *  - Verify 2 message were read
+     *  - Verify 2 messages were read
      *  - Verify 2 unique message IDs were read
-     *  - Verify consumer offset contains entries for House, Patio and Garden
+     *  - Verify consumer offsets contain entries for House, Patio and Garden
      *
      * 4) Read 2 messages from House and 2 messages from Patio
      *  - Verify 3 messages were read (there is a common message in next 2 messages stored in House and in Patio)
      *  - Verify 3 unique message IDs were read
-     *  - Verify consumer offset contains entries for House, Patio and Garden
+     *  - Verify consumer offsets contain entries for House, Patio and Garden
      *
      *  5) Read 1 message from House
-     *  - Verify 1 messages was read
-     *  - Verify consumer offset contains entries for House, Patio and Garden
+     *  - Verify 1 message was read
+     *  - Verify consumer offsets contain entries for House, Patio and Garden
      *
      *  5) Restore consumer offsets (x)
-     *   - Verify consumer offset contains entries for House and Patio
+     *   - Verify consumer offsets contain entries for House and Patio
      *
      *  6) Read 2 messages from Patio
      *  - Verify 1 message was read (there was only 1 remaining unread message in Patio)

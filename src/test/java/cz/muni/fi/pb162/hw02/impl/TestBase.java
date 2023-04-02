@@ -110,6 +110,11 @@ public class TestBase {
             public Map<String, Object> data() {
                 return data;
             }
+
+            @Override
+            public String toString() {
+                return "msg(id=" + id + ", topics=" + topics + ", data=" + data + ")";
+            }
         };
     }
 

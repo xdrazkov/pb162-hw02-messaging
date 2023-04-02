@@ -1,10 +1,14 @@
 package cz.muni.fi.pb162.hw02.impl;
 
 import cz.muni.fi.pb162.hw02.mesaging.client.Consumer;
+import org.assertj.core.api.Assert;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConsumerTest extends TestBase {
 
@@ -55,6 +59,23 @@ public class ConsumerTest extends TestBase {
         // then
         softly.assertThat(consumer.getOffsets())
                 .describedAs("Consumer offset before consuming any messages")
+                .isEmpty();
+    }
+
+    @Test
+    public void shouldNotUpdateOffset() {
+        // when
+        broker.setBatch(
+                msg(1L, TOPIC_HOUSE, Map.of())
+        );
+        var consumed = consumer.consume(Map.of(TOPIC_HOUSE, 1L), 1, TOPIC_HOUSE);
+        // then
+        softly.assertThat(consumed)
+                .describedAs("Messages consumed with explicit offset")
+                .hasSize(1)
+                .allSatisfy(msg -> assertThat(msg.id()).isEqualTo(1L));
+        softly.assertThat(consumer.getOffsets())
+                .describedAs("Consumer offsets")
                 .isEmpty();
     }
 

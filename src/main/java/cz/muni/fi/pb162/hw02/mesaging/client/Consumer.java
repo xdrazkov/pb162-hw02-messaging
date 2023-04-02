@@ -28,6 +28,24 @@ public interface Consumer extends Client {
      * Note: The offset update is more complex than it looks. Make sure not to lose any message on
      * consecutive calls.
      *
+     * An example (starting with empty offsets)
+     *
+     * <code>
+     *     // Topic     :   Messages
+     *     // A         :   #1, #5
+     *     // B         :   #1, #2, #3
+     *     // C         :   #1, #2, #5
+     *     // D         :   #3, #4
+     *
+     *     // consume 2 messages from topic "A" and topic "B"
+     *     consume(2, "A", "C"); // returns {#1, #2, #5}
+     *
+     *     assertThat(getOffsets()).containsExactlyEntriesOf(Map.of(
+     *         "A", 5
+     *         "C", 2
+     *     )); //  Notice that the last read message from topic "C" is #2!!!
+     * </code>
+     *
      * @param num maximum number of messages to consume per topic
      * @param topics topics from which to consume messages
      * @return collection of consumed messages
@@ -38,6 +56,8 @@ public interface Consumer extends Client {
      * Same as {@link #consume(int, String...)} except message offsets are provided explicitly.
      * This method ignores internally stored offsets and requests messages from the broker which
      * are unread according to the provided offsets map.
+     *
+     * This method does not update internal offsets
      *
      * @param offsets offset map as described in {@link #getOffsets()}
      * @param num maximum number of messages to consume per topic
