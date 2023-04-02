@@ -68,8 +68,6 @@ Follow instructions of your tutor because the procedure to submit your solution 
 - Single responsibility
   - Class should ideally have a single purpose
 - Extendable code
-  - Future support for different symbols...
-  - Future support for [different display types](https://en.wikiversity.org/wiki/Segment_display), e.g., three-segment displays.
 - All provided tests must pass
 
 
