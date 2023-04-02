@@ -3,7 +3,7 @@ Homework assignment no. 1, Simple Messaging
 
 **Publication date:**  April 3, 2023
 
-**Submission deadline:** March 17, 2023
+**Submission deadline:** April 17, 2023
 
 ## CHANGELOG
 
