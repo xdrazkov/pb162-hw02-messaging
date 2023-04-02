@@ -1,4 +1,4 @@
-image: gitlab.fi.muni.cz:5050/pb162/2023-hw02-messaging/ci:1.0
+image: quay.io/pb162/2023-hw02-messaging-ci:1.0
 
 build:
   script:
