@@ -37,7 +37,7 @@ public interface Consumer extends Client {
      *     // C         :   #1, #2, #5
      *     // D         :   #3, #4
      *
-     *     // consume 2 messages from topic "A" and topic "B"
+     *     // consume 2 messages from topic "A" and topic "C"
      *     consume(2, "A", "C"); // returns {#1, #2, #5}
      *
      *     assertThat(getOffsets()).containsExactlyEntriesOf(Map.of(
