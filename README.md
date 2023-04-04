@@ -7,6 +7,7 @@ Homework assignment no. 1, Simple Messaging
 
 ## CHANGELOG
 
+* 4.4.2023: Added tests for offsets according to javadoc of `Consumer#consume()`
 * 3.4.2023: Fixed information in JavaDoc of Consumer#consume()
 * 3.4.2023: Initial version
 

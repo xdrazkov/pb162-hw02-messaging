@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -251,5 +252,24 @@ public class ConsumerTest extends TestBase {
         softly.assertThat(broker.lastPollTopics())
                 .describedAs("Last topics used to query broker")
                 .containsExactlyInAnyOrder(TOPIC_HOUSE, TOPIC_GARDEN);
+    }
+
+    /**
+     * This tests describes scenario from {@link Consumer#consume(int, String...)}
+     */
+    @Test
+    public void shouldHaveCorrectOffsetsAsDocumented() {
+        // when
+        broker.setBatch(
+                msg(1L, Set.of(TOPIC_HOUSE, TOPIC_GARDEN, TOPIC_PATIO), Map.of()),
+                msg(2L, Set.of(TOPIC_GARDEN, TOPIC_PATIO), Map.of()),
+                msg(5L, Set.of(TOPIC_HOUSE, TOPIC_PATIO, "elsewhere"), Map.of())
+        );
+        consumer.consume(2, TOPIC_HOUSE, TOPIC_PATIO);
+        // then
+        softly.assertThat(consumer.getOffsets())
+                .describedAs("Consumer offsets")
+                .containsExactlyInAnyOrderEntriesOf(Map.of(
+                        TOPIC_HOUSE, 5L, TOPIC_PATIO, 2L));
     }
 }
