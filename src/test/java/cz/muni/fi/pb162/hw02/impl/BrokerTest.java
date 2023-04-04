@@ -14,7 +14,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BrokerTest extends TestBase{
+public class BrokerTest extends TestBase {
     private Broker broker;
 
     @BeforeEach
@@ -62,7 +62,7 @@ public class BrokerTest extends TestBase{
                 .allMatch(data2::equals);
         softly.assertThat(batch.stream().map(Message::topics).toList())
                 .describedAs("Data of each message")
-                .allSatisfy(topics-> assertThat(topics).containsExactly(TOPIC_HOUSE));
+                .allSatisfy(topics -> assertThat(topics).containsExactly(TOPIC_HOUSE));
     }
 
     @Test
@@ -250,7 +250,23 @@ public class BrokerTest extends TestBase{
         softly.assertThat(tomFromHouse.data()).isEqualTo(tomFromGarden.data());
     }
 
+    @Test
+    public void shouldCorrectlyPollMessagesWithOverlappingTopics() {
+        // when
+        push(
+                msg(Set.of(TOPIC_HOUSE, TOPIC_GARDEN, TOPIC_PATIO), Map.of()),
+                msg(Set.of(TOPIC_GARDEN, TOPIC_PATIO), Map.of()),
+                msg(Set.of(TOPIC_HOUSE, TOPIC_PATIO, "elsewhere"), Map.of())
+        );
+        var polled = broker.poll(Map.of(),2, Set.of(TOPIC_HOUSE, TOPIC_PATIO));
+        // then
+        softly.assertThat(polled)
+                .describedAs("Messages polled from broker")
+                .hasSize(3);
+    }
+
     private Collection<Message> push(Message... messages) {
         return broker.push(Arrays.asList(messages));
     }
+
 }
