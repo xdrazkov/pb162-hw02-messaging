@@ -187,7 +187,7 @@ public class TestBase {
 
         @Override
         public Collection<Message> poll(Map<String, Long> offsets, int num, Collection<String> topics) {
-            this.lastPollOffsets = offsets;
+            this.lastPollOffsets = new HashMap<>(offsets);
             this.lastPollNum = num;
             this.lastPollTopics = topics;
             return batch;

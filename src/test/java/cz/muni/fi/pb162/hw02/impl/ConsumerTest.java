@@ -1,8 +1,6 @@
 package cz.muni.fi.pb162.hw02.impl;
 
 import cz.muni.fi.pb162.hw02.mesaging.client.Consumer;
-import org.assertj.core.api.Assert;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -141,6 +139,7 @@ public class ConsumerTest extends TestBase {
     public void shouldConsumeNoMessagesFromEmptyBroker() {
         // when
         broker.setBatch();
+        var offsets = consumer.getOffsets();
         var consumed = consumer.consume(2, TOPIC_HOUSE);
         // then
         softly.assertThat(consumed)
@@ -148,7 +147,7 @@ public class ConsumerTest extends TestBase {
                 .isEmpty();
         softly.assertThat(broker.lastPollOffsets())
                 .describedAs("Last offsets used to query broker")
-                .containsExactlyInAnyOrderEntriesOf(consumer.getOffsets());
+                .containsExactlyInAnyOrderEntriesOf(offsets);
         softly.assertThat(broker.lastPollNum())
                 .describedAs("Last message number used to query broker")
                 .isEqualTo(2);
@@ -161,6 +160,7 @@ public class ConsumerTest extends TestBase {
     public void shouldConsumeNoMessagesFromEmptyTopic() {
         // when
         broker.setBatch();
+        var offsets = consumer.getOffsets();
         var consumed = consumer.consume(2, TOPIC_HOUSE);
         // then
         softly.assertThat(consumed)
@@ -168,7 +168,7 @@ public class ConsumerTest extends TestBase {
                 .isEmpty();
         softly.assertThat(broker.lastPollOffsets())
                 .describedAs("Last offsets used to query broker")
-                .containsExactlyInAnyOrderEntriesOf(consumer.getOffsets());
+                .containsExactlyInAnyOrderEntriesOf(offsets);
         softly.assertThat(broker.lastPollNum())
                 .describedAs("Last message number used to query broker")
                 .isEqualTo(2);
@@ -182,6 +182,7 @@ public class ConsumerTest extends TestBase {
     public void shouldConsumeSingleMessageFromTopic() {
         // when
         broker.setBatch(msg(1L, TOPIC_GARDEN, Map.of()));
+        var offsets = consumer.getOffsets();
         var consumed = consumer.consume(1, TOPIC_GARDEN);
         // then
         softly.assertThat(consumed)
@@ -190,7 +191,7 @@ public class ConsumerTest extends TestBase {
                 .containsExactlyInAnyOrder(msg(1L, TOPIC_GARDEN, Map.of()));
         softly.assertThat(broker.lastPollOffsets())
                 .describedAs("Last offsets used to query broker")
-                .containsExactlyInAnyOrderEntriesOf(consumer.getOffsets());
+                .containsExactlyInAnyOrderEntriesOf(offsets);
         softly.assertThat(broker.lastPollNum())
                 .describedAs("Last message number used to query broker")
                 .isEqualTo(1);
@@ -210,6 +211,7 @@ public class ConsumerTest extends TestBase {
                 msg(11L, TOPIC_HOUSE, Map.of())
 
         );
+        var offsets = consumer.getOffsets();
         var consumed = consumer.consume(2, TOPIC_HOUSE, TOPIC_GARDEN);
         // then
         softly.assertThat(consumed)
@@ -223,7 +225,7 @@ public class ConsumerTest extends TestBase {
                 );
         softly.assertThat(broker.lastPollOffsets())
                 .describedAs("Last offsets used to query broker")
-                .containsExactlyInAnyOrderEntriesOf(consumer.getOffsets());
+                .containsExactlyInAnyOrderEntriesOf(offsets);
         softly.assertThat(broker.lastPollNum())
                 .describedAs("Last message number used to query broker")
                 .isEqualTo(2);
@@ -235,6 +237,7 @@ public class ConsumerTest extends TestBase {
         broker.setBatch(
                 msg(3L, TOPIC_GARDEN, Map.of())
         );
+        offsets = consumer.getOffsets();
         consumed = consumer.consume(1, TOPIC_GARDEN, TOPIC_HOUSE);
         // then
         softly.assertThat(consumed)
@@ -245,7 +248,7 @@ public class ConsumerTest extends TestBase {
                 );
         softly.assertThat(broker.lastPollOffsets())
                 .describedAs("Last offsets used to query broker")
-                .containsExactlyInAnyOrderEntriesOf(consumer.getOffsets());
+                .containsExactlyInAnyOrderEntriesOf(offsets);
         softly.assertThat(broker.lastPollNum())
                 .describedAs("Last message number used to query broker")
                 .isEqualTo(1);

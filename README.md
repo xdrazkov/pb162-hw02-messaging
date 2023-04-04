@@ -6,7 +6,7 @@ Homework assignment no. 1, Simple Messaging
 **Submission deadline:** April 17, 2023
 
 ## CHANGELOG
-
+* 4.4.2023: Fixed sever implementation issue in `TestBroker`
 * 4.4.2023: Added test for polling messages with overlapping topics
 * 4.4.2023: Added tests for offsets according to javadoc of `Consumer#consume()`
 * 3.4.2023: Fixed information in JavaDoc of Consumer#consume()
