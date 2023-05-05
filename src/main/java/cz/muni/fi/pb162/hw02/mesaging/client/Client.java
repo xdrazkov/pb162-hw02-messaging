@@ -12,7 +12,7 @@ public interface Client  {
     /**
      * @return broker object associated with this client
      */
-    Broker broker();
+    Broker getBroker();
 
     /**
      * Lists topics currently registered by the broker.

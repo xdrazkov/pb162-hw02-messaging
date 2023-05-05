@@ -8,39 +8,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MyConsumer implements Consumer {
-    private final Broker broker;
+public class MessageConsumer extends SimpleClient implements Consumer {
     private Map<String, Long> offsets = new HashMap<>();
 
     /**
      * Constructor
      * @param broker the broker
      */
-    public MyConsumer(Broker broker) {
-        this.broker = broker;
-    }
-
-    @Override
-    public Broker broker() {
-        return broker;
-    }
-
-    @Override
-    public Collection<String> listTopics() {
-        return broker.listTopics();
+    public MessageConsumer(Broker broker) {
+        super(broker);
     }
 
     @Override
     public Collection<Message> consume(int num, String... topics) {
-        Collection<Message> messages = broker.poll(offsets, num, List.of(topics));
+        Collection<Message> messages = getBroker().poll(offsets, num, List.of(topics));
         List<Message> sortedMessages = new ArrayList<>(messages);
         sortedMessages.sort(Comparator.comparingLong(Message::id));
 
-        LinkedHashMap<String, Integer> topicsAdded = new LinkedHashMap<>();
+        HashMap<String, Integer> topicsAdded = new HashMap<>();
         for (String topic : topics) {
             topicsAdded.put(topic, 0);
         }
@@ -50,7 +38,7 @@ public class MyConsumer implements Consumer {
                 if (!topicsAdded.containsKey(topic) || topicsAdded.get(topic) == num) {
                     continue;
                 }
-                long offsetValue = offsets.get(topic) == null ? 0L : offsets.get(topic);
+                long offsetValue = offsets.getOrDefault(topic, 0L);
                 if (message.id() > offsetValue) {
                     offsets.put(topic, message.id());
                     topicsAdded.put(topic, topicsAdded.get(topic) + 1);
@@ -63,7 +51,7 @@ public class MyConsumer implements Consumer {
 
     @Override
     public Collection<Message> consume(Map<String, Long> offsets, int num, String... topics) {
-        return broker.poll(offsets, num, List.of(topics));
+        return getBroker().poll(offsets, num, List.of(topics));
     }
 
     @Override
@@ -73,7 +61,7 @@ public class MyConsumer implements Consumer {
 
     @Override
     public void setOffsets(Map<String, Long> offsets) {
-        this.offsets = offsets;
+        this.offsets = new HashMap<>(offsets);
     }
 
     @Override

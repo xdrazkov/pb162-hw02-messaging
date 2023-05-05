@@ -16,7 +16,7 @@ public final class Messaging {
      * @return broker instance
      */
     public static Broker broker() {
-        return new MyBroker();
+        return new InMemoryBroker();
     }
 
     /**
@@ -26,7 +26,7 @@ public final class Messaging {
      * @return client instance
      */
     public static Producer producer(Broker broker) {
-        return new MyProducer(broker);
+        return new SimpleProducer(broker);
     }
 
     /**
@@ -36,6 +36,6 @@ public final class Messaging {
      * @return client instance
      */
     public static Consumer consumer(Broker broker) {
-        return new MyConsumer(broker);
+        return new MessageConsumer(broker);
     }
 }

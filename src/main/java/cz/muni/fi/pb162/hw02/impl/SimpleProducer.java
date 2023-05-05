@@ -7,10 +7,14 @@ import cz.muni.fi.pb162.hw02.mesaging.client.Producer;
 import java.util.Collection;
 import java.util.Collections;
 
-public record MyProducer(Broker broker) implements Producer {
-    @Override
-    public Collection<String> listTopics() {
-        return broker.listTopics();
+public class SimpleProducer extends SimpleClient implements Producer {
+    /**
+     * Constructor
+     *
+     * @param broker the broker
+     */
+    public SimpleProducer(Broker broker) {
+        super(broker);
     }
 
     @Override
@@ -20,6 +24,6 @@ public record MyProducer(Broker broker) implements Producer {
 
     @Override
     public Collection<Message> produce(Collection<Message> messages) {
-        return broker.push(messages);
+        return getBroker().push(messages);
     }
 }

@@ -5,34 +5,33 @@ import cz.muni.fi.pb162.hw02.mesaging.broker.Message;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class MyBroker implements Broker {
+public class InMemoryBroker implements Broker {
     private final HashMap<String, ArrayList<Message>> topics = new HashMap<>();
     private static Long messageID = 0L;
 
     @Override
     public Collection<String> listTopics() {
-        return topics.keySet();
+        return Collections.unmodifiableCollection(topics.keySet());
     }
 
     @Override
     public Collection<Message> push(Collection<Message> messages) {
-        Collection<Message> returnValue = new ArrayList<>();
+        Collection<Message> result = new ArrayList<>();
         for (Message message : messages) {
-            Message newMessage = new MyMessage(getNewMessageID(), message.topics(), message.data());
-            returnValue.add(newMessage);
+            Message newMessage = new SimpleMessage(getNewMessageID(), message.topics(), message.data());
+            result.add(newMessage);
             for (String topic : message.topics()) {
-                if (!topics.containsKey(topic)) {
-                    topics.put(topic, new ArrayList<>());
-                }
+                topics.putIfAbsent(topic, new ArrayList<>());
                 topics.get(topic).add(newMessage);
             }
         }
-        return returnValue;
+        return result;
     }
 
     @Override
@@ -44,8 +43,7 @@ public class MyBroker implements Broker {
                 continue;
             }
             for (Message message : this.topics.get(topic)) {
-                long topicOffset = offsets.getOrDefault(topic, 0L);
-                if (message.id() > topicOffset && message.topics().contains(topic)) {
+                if (message.id() > offsets.getOrDefault(topic, 0L) && message.topics().contains(topic)) {
                     messages.add(message);
                     if (++messagesAdded == num) {
                         break;
